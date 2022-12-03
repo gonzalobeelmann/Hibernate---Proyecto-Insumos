@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="datos.Pedido" table="pedido">
+
+	<id column="idpedido" name="idPedido">
+	<generator class="identity"/></id>
+
+	<property column="area" name="area" type="string"/>
+	<property column="fechacreacion" name="fechaCreacion" type="LocalDate"/>
+	<property column="abierto" name="abierto" type="boolean"/>
+
+	<set name="itemPedidos" table="itempedido" order-by="iditempedido asc" inverse="true" lazy="true" fetch="select">	
+	<key column="idpedido" not-null="true"/>	
+	<one-to-many class="datos.ItemPedido"/>
+	</set>	
+	
+	<joined-subclass name="datos.PedidoMensual" table="pedidomensual">
+		<key column="idpedido"/>
+		<property column="fechaentrega" name="fechaEntrega" type="LocalDate"/>
+	</joined-subclass>
+	
+	<joined-subclass name="datos.PedidoCritico" table="pedidocritico">
+		<key column="idpedido"/>
+		<property column="motivo" name="motivo" type="string"/>
+		<property column="porcentajeextra" name="porcentajeExtra" type="double"/>
+	</joined-subclass>
+
+	</class>
+		
+</hibernate-mapping>
